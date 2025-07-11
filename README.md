@@ -1,38 +1,40 @@
-# testforestfires
+# TesForestFires – Fire Weather Index Prediction App
 
-#  TesForestFires - Fire Weather Index Prediction
-
-A machine learning project that predicts the **Fire Weather Index (FWI)** based on weather and environmental factors using Lasso Regression.
+A machine learning web application that predicts the **Fire Weather Index (FWI)** based on various environmental features. It uses **Lasso Regression** and provides real-time visual feedback through an interactive chart using **Chart.js**.
 
 ## Project Overview
 
-This project focuses on predicting fire risk using various meteorological and forest conditions. The prediction is shown on a simple web interface built using Flask and HTML. The goal is to demonstrate a real-time machine learning prediction system with a clean UI and reliable backend.
+This project is built to predict forest fire risks using weather conditions and vegetation parameters. Users can input 9 features via a web interface, and the app returns the FWI prediction along with a dynamic bar chart for visual interpretation.
 
 ## Features
 
-- Exploratory Data Analysis (EDA)
-- Feature Engineering (FE)
-- Lasso Regression Model
-- Web-based prediction interface
-- Deployment-ready structure (pickle model + scaler)
-- Based on inputs like Temperature, RH, Wind Speed, Rainfall, FFMC, DMC, ISI, Region, and Fire Class
+-  EDA & Feature Engineering in Jupyter
+-  Model training using **Lasso Regression**
+-  Flask-based web backend
+-  **Interactive HTML form** for user inputs
+-  Real-time prediction of FWI
+-  **Dynamic Chart.js visualization** of inputs and output
+-  Organized, production-ready structure
 
-Model Used: Lasso Regression (sklearn.linear_model.Lasso)
+  
+Model Details:-
+
+Model: Lasso Regression
 
 Preprocessing: StandardScaler
 
-Pickle Files: ridge.pkl (model), scaler.pkl (preprocessing)
+Tools: scikit-learn, Flask, HTML, Chart.js
 
- Libraries Used
+Tech Stack
 
-Python
-
-NumPy
-
-Pandas
-
-Scikit-learn
+Python 3.x
 
 Flask
 
-Jupyter Notebook
+scikit-learn
+
+HTML + CSS
+
+Jupyter Notebooks
+
+Git & GitHub

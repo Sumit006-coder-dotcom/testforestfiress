@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FWI Result</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial; background: #f0f2f5; padding: 20px; text-align: center; }
+        .result-box {
+            max-width: 600px; margin: auto;
+            background: #fff; padding: 30px;
+            border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 { color: #4CAF50; }
+        a { display: inline-block; margin-top: 20px; text-decoration: none; color: #007BFF; }
+        canvas { margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="result-box">
+        <h2>🔥 Predicted Fire Weather Index:</h2>
+        <h1>{{ prediction }}</h1>
+        <a href="/">Predict Again</a>
+
+        <canvas id="fwiChart" width="500" height="300"></canvas>
+    </div>
+
+    <script>
+        // Data from Flask (injected variables)
+        const prediction = {{ prediction }};
+        const inputValues = {
+            Temperature: {{ temperature | safe }},
+            RH: {{ rh | safe }},
+            Ws: {{ ws | safe }},
+            Rain: {{ rain | safe }},
+            FFMC: {{ ffmc | safe }},
+            DMC: {{ dmc | safe }},
+            ISI: {{ isi | safe }},
+            Classes: {{ classes | safe }},
+            Region: {{ region | safe }}
+        };
+
+        // Prepare labels and values for graph (show inputs + prediction)
+        const labels = Object.keys(inputValues);
+        const inputData = Object.values(inputValues);
+        const predictionData = new Array(labels.length).fill(null); // empty for inputs
+        predictionData.push(prediction); // add prediction at end
+
+        // Add 'FWI Prediction' label at the end
+        labels.push('FWI Prediction');
+
+        const ctx = document.getElementById('fwiChart').getContext('2d');
+
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Input Values and Prediction',
+                    data: [...inputData, prediction],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)', // for inputs
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 99, 132, 0.7)'  // for prediction (different color)
+                    ],
+                    borderColor: 'rgba(0,0,0,0.1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,1 +1,63 @@
-<h1>Welcome to the home page</h1>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FWI Prediction</title>
+    <style>
+        body { font-family: Arial; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
+        h2 { text-align: center; }
+        input[type=number] {
+            width: 100%; padding: 10px; margin: 5px 0;
+        }
+        input[type=submit] {
+            background-color: #4CAF50; color: white; padding: 10px; width: 100%;
+            border: none; border-radius: 5px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔥 Fire Weather Index Predictor</h2>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+              {% for message in messages %}
+                <li style="color: red;">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        <form action="/predictdata" method="POST">
+            <label>Temperature</label>
+            <input type="number" step="any" name="Temperature" required>
+
+            <label>Relative Humidity (RH)</label>
+            <input type="number" step="any" name="RH" required>
+
+            <label>Wind Speed (Ws)</label>
+            <input type="number" step="any" name="Ws" required>
+
+            <label>Rain</label>
+            <input type="number" step="any" name="Rain" required>
+
+            <label>FFMC</label>
+            <input type="number" step="any" name="FFMC" required>
+
+            <label>DMC</label>
+            <input type="number" step="any" name="DMC" required>
+
+            <label>ISI</label>
+            <input type="number" step="any" name="ISI" required>
+
+            <label>Classes (0 = No Fire, 1 = Fire)</label>
+            <input type="number" name="Classes" min="0" max="1" required>
+
+            <label>Region (1 or 2)</label>
+            <input type="number" name="Region" min="1" max="2" required>
+
+            <input type="submit" value="Predict FWI">
+        </form>
+    </div>
+</body>
+</html>

@@ -1,44 +1,48 @@
 import pickle
-from flask import Flask,request,jsonify,render_template
+from flask import Flask, request, render_template, flash
 import numpy as np
-import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
+# Initialize the Flask app
 application = Flask(__name__)
 app = application
+app.secret_key = "your_secret_key"  # Needed for flash messages
 
-## import ridge regressor and standard scaler pickle
-ridge_model = pickle.load(open('models/ridge.pkl','rb'))
-standard_scaler = pickle.load(open('models/scaler.pkl','rb'))
+# Load the model and scaler
+ridge_model = pickle.load(open('models/ridge.pkl', 'rb'))
+standard_scaler = pickle.load(open('models/scaler.pkl', 'rb'))
 
-
-
+# Home route
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
-
-@app.route('/predictdata',methods=['GET','POST'])
+# Prediction route
+@app.route("/predictdata", methods=["POST"])
 def predict_datapoint():
-    if request.method == "POST":
-        Temperature = float(request.form.get('Temperature'))
-        RH = float(request.form.get('RH'))
-        Ws = float(request.form.get('Ws'))
-        Rain = float(request.form.get('Rain'))
-        FFMC = float(request.form.get('FFMC'))
-        DMC = float(request.form.get('DMC'))
-        ISI = float(request.form.get('ISI'))
-        Classes = float(request.form.get('Classes'))
-        Region = float(request.form.get('Region'))
+    try:
+        # Get data from form
+        data = [
+            float(request.form["Temperature"]),
+            float(request.form["RH"]),
+            float(request.form["Ws"]),
+            float(request.form["Rain"]),
+            float(request.form["FFMC"]),
+            float(request.form["DMC"]),
+            float(request.form["ISI"]),
+            float(request.form["Classes"]),
+            float(request.form["Region"]),
+        ]
         
-        new_data_scaled = standard_scaler.transform([[Temperature,RH,Ws,Rain,FFMC,DMC,ISI,Classes,Region]])
-        result = ridge_model.predict(new_data_scaled)
+        # Scale the input
+        scaled_data = standard_scaler.transform([data])
+        prediction = ridge_model.predict(scaled_data)[0]
         
-        
-        return render_template('home.html',results=result[0])
-        
-    else:
-        return render_template('home.html')
+        return render_template("result.html", prediction=round(prediction, 2))
+    
+    except Exception as e:
+        flash(f"Error: {str(e)}. Please check your inputs.")
+        return render_template("index.html")
 
-if __name__=="__main__":
-    app.run(host="0.0.0.0")
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
